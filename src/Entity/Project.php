@@ -17,7 +17,7 @@ class Project
     private ?string $name = null;
 
     #[ORM\Column]
-    private ?\DateTime $dateDemarrage = null;
+    private ?\DateTime $startDate = null;
 
     #[ORM\Column]
     private ?\DateTime $deadline = null;
@@ -39,14 +39,14 @@ class Project
         return $this;
     }
 
-    public function getDateDemarrage(): ?\DateTime
+    public function getStartDate(): ?\DateTime
     {
-        return $this->dateDemarrage;
+        return $this->startDate;
     }
 
-    public function setDateDemarrage(\DateTime $dateDemarrage): static
+    public function setStartDate(\DateTime $startDate): static
     {
-        $this->dateDemarrage = $dateDemarrage;
+        $this->startDate = $startDate;
 
         return $this;
     }
