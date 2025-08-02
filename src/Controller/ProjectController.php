@@ -3,9 +3,12 @@
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Entity\Project;
+use App\Form\ProjectType;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use App\Entity\Employe;
 
@@ -26,15 +29,62 @@ final class ProjectController extends AbstractController
         ]);
     }
     #[Route('/project/add', name: 'project_add')]
-    public function addProject(ManagerRegistry $doctrine): Response
+    public function addProject(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $project = new Project();
+        $form = $this->createForm(ProjectType::class, $project);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($project);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_project');
+        }
+        // Passer les projets au template
+        return $this->render('project/project_add.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+    #[Route('/project/show/{id}', name: 'project_show')]
+    public function showProject(ManagerRegistry $doctrine, int $id): Response
     {
         // Récupérer le repository pour l'entité Project
-        $employeRepository = $doctrine->getRepository(Employe::class);
-        // Récupérer tous les employés
-        $employes = $employeRepository->findAll();
-        // Passer les emplyés au template
-        return $this->render('project/project_add.html.twig', [
-            'employes' => $employes,
+         $projectRepository = $doctrine->getRepository(Project::class);
+
+        // Récupérer tous les projets
+        $project = $projectRepository->find($id);
+
+        // Passer les projets au template
+        return $this->render('project/show.html.twig', [
+            'project' => $project,
         ]);
+    }
+    #[Route('/project/edit/{id}', name: 'project_edit')]
+    public function editProject(ManagerRegistry $doctrine, int $id): Response
+    {
+        // Récupérer le repository pour l'entité Project
+         $projectRepository = $doctrine->getRepository(Project::class);
+
+        // Récupérer tous les projets
+        $project = $projectRepository->find($id);
+
+        // Passer les projets au template
+        return $this->render('project/edit.html.twig', [
+            'project' => $project,
+        ]);
+    }
+    #[Route('/project/delete/{id}', name: 'project_delete')]
+    public function deleteProject(ManagerRegistry $doctrine, int $id): Response
+    {
+        // Récupérer le repository pour l'entité Project
+        $projectRepository = $doctrine->getRepository(Project::class);
+        $project = $projectRepository->find($id);
+        $doctrine->getManager()->remove($project);
+        
+        $doctrine->getManager()->flush();
+
+        // Passer les projets au template
+        return $this->redirectToRoute("app_project");
     }
 }

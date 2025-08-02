@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ProjectRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ProjectRepository::class)]
@@ -22,6 +24,16 @@ class Project
     #[ORM\Column]
     private ?\DateTime $deadline = null;
 
+    #[ORM\ManyToMany(targetEntity: Employe::class, inversedBy: 'projects')]
+    private Collection $employes;
+
+     public function __construct()
+    {
+        $this->employes = new ArrayCollection();
+        $this->startDate = new \DateTime(); 
+        $this->deadline = new \DateTime();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -35,7 +47,6 @@ class Project
     public function setName(string $name): static
     {
         $this->name = $name;
-
         return $this;
     }
 
@@ -47,7 +58,6 @@ class Project
     public function setStartDate(\DateTime $startDate): static
     {
         $this->startDate = $startDate;
-
         return $this;
     }
 
@@ -59,6 +69,26 @@ class Project
     public function setDeadline(\DateTime $deadline): static
     {
         $this->deadline = $deadline;
+        return $this;
+    }
+
+    public function getEmployes(): Collection
+    {
+        return $this->employes;
+    }
+
+    public function addEmploye(Employe $employe): static
+    {
+        if (!$this->employes->contains($employe)) {
+            $this->employes->add($employe);
+        }
+
+        return $this;
+    }
+
+    public function removeEmploye(Employe $employe): static
+    {
+        $this->employes->removeElement($employe);
 
         return $this;
     }

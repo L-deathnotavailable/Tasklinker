@@ -2,18 +2,8 @@
 {% block page_title %}Nouveau projet{% endblock %}
 {% block body %}
 
-<form name="projet" method="post">
-    <div><label for="projet_nom" class="required">Titre du projet</label><input type="text" id="projet_nom" name="projet[nom]" required="required" /></div>
-    <div>
-        <label for="projet_employes">Inviter des membres</label>
-        <select id="projet_employes" name="projet[employes][]" multiple="multiple">
-        {% for employe in employes %}
-            <option value="{{ employe.id }}">{{ employe.name }}</option>
-        {% endfor %}
-        </select>
-    </div>
-    <br>
-    <button class="button button-submit">Continuer</button>
-</form>
+{{ form_start(form) }}
+    {{ form_widget(form) }}
+{{ form_end(form) }}
 
 {% endblock %}
