@@ -22,14 +22,11 @@ class ProjectType extends AbstractType
             ])
             ->add('employes', EntityType::class, [
                 'class' => Employe::class,
-                'choice_label' => 'name',
+                'choice_label' => fn (Employe $e) => sprintf('%s %s', $e->getFirstname(), $e->getName()),
                 'multiple' => true,
+                'autocomplete' => true,
                 'label' => 'Inviter des membres',
                 'required' => false,
-            ])
-            ->add('save', SubmitType::class, [
-                'label' => 'Continuer',
-                'attr' => ['class' => 'button button-submit'],
             ]);
     }
 

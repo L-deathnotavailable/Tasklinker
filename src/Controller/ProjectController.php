@@ -61,17 +61,25 @@ final class ProjectController extends AbstractController
         ]);
     }
     #[Route('/project/edit/{id}', name: 'project_edit')]
-    public function editProject(ManagerRegistry $doctrine, int $id): Response
+    public function editProject(Request $request, EntityManagerInterface $entityManager, int $id): Response
     {
-        // Récupérer le repository pour l'entité Project
-         $projectRepository = $doctrine->getRepository(Project::class);
+        $project = $entityManager->getRepository(Project::class)->find($id);
 
-        // Récupérer tous les projets
-        $project = $projectRepository->find($id);
+        if (!$project) {
+            throw $this->createNotFoundException('Projet introuvable');
+        }
 
-        // Passer les projets au template
+        $form = $this->createForm(ProjectType::class, $project);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->flush(); // pas besoin de persist, objet déjà géré
+            return $this->redirectToRoute('app_project');
+        }
+
         return $this->render('project/edit.html.twig', [
             'project' => $project,
+            'form' => $form->createView(),
         ]);
     }
     #[Route('/project/delete/{id}', name: 'project_delete')]
