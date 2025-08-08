@@ -33,6 +33,9 @@ class Employe
     #[ORM\ManyToMany(targetEntity: Project::class, mappedBy: 'employes')]
     private Collection $projects;
 
+    #[ORM\Column(length: 255)]
+    private ?string $email = null;
+
     public function __construct()
     {
         $this->projects = new ArrayCollection();
@@ -121,6 +124,18 @@ class Employe
         if ($this->projects->removeElement($project)) {
             $project->removeEmploye($this);
         }
+
+        return $this;
+    }
+
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(string $email): static
+    {
+        $this->email = $email;
 
         return $this;
     }
