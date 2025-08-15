@@ -27,6 +27,10 @@ class ProjectType extends AbstractType
                 'autocomplete' => true,
                 'label' => 'Inviter des membres',
                 'required' => false,
+                'attr' => [
+                    'class' => 'select2-multiple',
+                    'data-placeholder' => 'Sélectionnez des membres'
+                ]
             ]);
     }
 
