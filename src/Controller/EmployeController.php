@@ -8,6 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Doctrine\Persistence\ManagerRegistry;
 
 #[Route('/employes')]
 class EmployeController extends AbstractController
@@ -35,14 +36,16 @@ class EmployeController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
-    #[Route('/employes/{id}/delete', name: 'employe_delete', methods: ['POST'])]
-    public function delete(Request $request, Employe $employe, EntityManagerInterface $em): Response
+    #[Route('/employes/{id}/delete', name: 'employe_delete', methods: ['POST','GET'])]
+    public function deleteEmploye(ManagerRegistry $doctrine, int $id): Response
     {
-        if ($this->isCsrfTokenValid('delete' . $employe->getId(), $request->request->get('_token'))) {
-            $em->remove($employe);
-            $em->flush();
-        }
+        $employeRepository = $doctrine->getRepository(Employe::class);
+        $employe = $employeRepository->find($id);
+        $doctrine->getManager()->remove($employe);
+        
+        $doctrine->getManager()->flush();
 
+        $this->addFlash('success', 'Employé supprimé.');
         return $this->redirectToRoute('app_employes');
     }
 }

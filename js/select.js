@@ -1,3 +1,6 @@
 $(document).ready(function() {
-    $('select[multiple]').select2();
+    $('.select2-multiple').select2({
+        theme: "classic",
+        closeOnSelect: false
+    });
 });

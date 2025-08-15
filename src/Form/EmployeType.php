@@ -17,14 +17,6 @@ class EmployeType extends AbstractType
         $builder
             ->add('firstname', TextType::class, ['label' => 'Prénom'])
             ->add('name', TextType::class, ['label' => 'Nom'])
-            ->add('level_access', ChoiceType::class, [
-                'label' => 'Niveau d’accès',
-                'choices' => [
-                    'Admin' => 'Admin',
-                    'User'  => 'User',
-                ],
-                'placeholder' => 'Choisir…',
-            ])
             ->add('contract_type', ChoiceType::class, [
                 'label' => 'Statut',
                 'choices' => [
@@ -36,7 +28,7 @@ class EmployeType extends AbstractType
             ])
             ->add('arrived_date', DateType::class, [
                 'label' => 'Date d’arrivée',
-                'widget' => 'single_text',   // input type="date"
+                'widget' => 'single_text', 
                 'required' => false,
             ])
             ->add('email', EmailType::class, ['label' => 'Email'])

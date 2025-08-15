@@ -10,7 +10,6 @@ use App\Entity\Project;
 use App\Form\ProjectType;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
-use App\Entity\Employe;
 
 final class ProjectController extends AbstractController
 {
