@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\TaskRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: TaskRepository::class)]
@@ -25,11 +27,12 @@ class Task
     #[ORM\Column(length: 255)]
     private ?string $id_project = null;
 
-    #[ORM\Column]
+    #[ORM\Column (nullable: true)]
     private ?int $user_id = null;
 
-    #[ORM\Column]
-    private ?int $status_id = null;
+    #[ORM\ManyToOne(inversedBy: 'tasks')]
+    private ?states $state = null;
+
 
     public function getId(): ?int
     {
@@ -96,14 +99,14 @@ class Task
         return $this;
     }
 
-    public function getStatusId(): ?int
+    public function getState(): ?states
     {
-        return $this->status_id;
+        return $this->state;
     }
 
-    public function setStatusId(int $status_id): static
+    public function setState(?states $state): static
     {
-        $this->status_id = $status_id;
+        $this->state = $state;
 
         return $this;
     }
