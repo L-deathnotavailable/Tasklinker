@@ -10,17 +10,18 @@ class ProjectFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
-        $employesData = [
+        $projectData = [
             ['name' => 'Refonte du site', 'startdate' => new \DateTime('2025-01-15'), 'deadline' => new \DateTime('2025-02-15')]
         ];
 
-        foreach ($employesData as $data) {
-            $employe = new Project();
-            $employe->setName($data['name']);
-            $employe->setStartDate($data['startdate']);
-            $employe->setDeadline($data['deadline']);
+        foreach ($projectData as $key => $data) {
+            $project = new Project();
+            $project->setName($data['name']);
+            $project->setStartDate($data['startdate']);
+            $project->setDeadline($data['deadline']);
+            $this->setReference('project_'.$key, $project);
 
-            $manager->persist($employe);
+            $manager->persist($project);
         }
 
         $manager->flush();

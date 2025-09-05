@@ -24,14 +24,15 @@ class Task
     #[ORM\Column]
     private ?\DateTime $deadline = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $id_project = null;
-
-    #[ORM\Column (nullable: true)]
-    private ?int $user_id = null;
+    #[ORM\ManyToOne(inversedBy: 'tasks')]
+    private ?States $state = null;
 
     #[ORM\ManyToOne(inversedBy: 'tasks')]
-    private ?states $state = null;
+    #[ORM\JoinColumn(nullable: false)]
+    private ?project $project = null;
+
+    #[ORM\ManyToOne(inversedBy: 'tasks')]
+    private ?Employe $employe = null;
 
 
     public function getId(): ?int
@@ -75,30 +76,6 @@ class Task
         return $this;
     }
 
-    public function getIdProject(): ?string
-    {
-        return $this->id_project;
-    }
-
-    public function setIdProject(string $id_project): static
-    {
-        $this->id_project = $id_project;
-
-        return $this;
-    }
-
-    public function getUserId(): ?int
-    {
-        return $this->user_id;
-    }
-
-    public function setUserId(int $user_id): static
-    {
-        $this->user_id = $user_id;
-
-        return $this;
-    }
-
     public function getState(): ?states
     {
         return $this->state;
@@ -107,6 +84,29 @@ class Task
     public function setState(?states $state): static
     {
         $this->state = $state;
+
+        return $this;
+    }
+
+    public function getProject(): ?project
+    {
+        return $this->project;
+    }
+
+    public function setProject(?project $project): static
+    {
+        $this->project = $project;
+
+        return $this;
+    }
+        public function getEmploye(): ?Employe
+    {
+        return $this->employe;
+    }
+
+    public function setEmploye(?Employe $employe): static
+    {
+        $this->employe = $employe;
 
         return $this;
     }

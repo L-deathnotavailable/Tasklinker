@@ -16,7 +16,7 @@ class EmployeFixtures extends Fixture
             ['name' => 'Bernard', 'firstname' => 'Luc', 'email' => 'luc.bernard@driblet.com', 'levelAccess' => 'User', 'ContractType' => 'CDI', 'ArrivedDate' => new \DateTime('2019-11-05')],
         ];
 
-        foreach ($employesData as $data) {
+        foreach ($employesData as $key => $data) {
             $employe = new Employe();
             $employe->setName($data['name']);
             $employe->setFirstname($data['firstname']);
@@ -24,6 +24,7 @@ class EmployeFixtures extends Fixture
             $employe->setLevelAccess($data['levelAccess']);
             $employe->setContractType($data['ContractType']);
             $employe->setArrivedDate($data['ArrivedDate']);
+            $this->setReference('employe_'.$key, $employe);
 
             $manager->persist($employe);
         }
