@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block page_title %}{{ task.title }}{% endblock %}
+
+{% block body %}
+    {{ form_start(form) }}
+        {{ form_row(form.title) }}
+        {{ form_row(form.description) }}
+        <div class="flex-form">
+            {{ form_row(form.deadline) }}
+            {{ form_row(form.state) }}
+        </div>
+        {{ form_row(form.employe) }}
+        <br>
+        <button class="button button-submit">Modifier</button>
+        <a href="{{ path('task_delete', { id: task.id }) }}" 
+            class="delete-task" 
+            onclick="return confirm('Voulez-vous vraiment supprimer cette tâche ?');">
+            Supprimer la tâche
+        </a>
+    {{ form_end(form) }}
+
+{% endblock %}

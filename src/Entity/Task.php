@@ -29,7 +29,7 @@ class Task
 
     #[ORM\ManyToOne(inversedBy: 'tasks')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?project $project = null;
+    private ?Project $project = null;
 
     #[ORM\ManyToOne(inversedBy: 'tasks')]
     private ?Employe $employe = null;
@@ -76,24 +76,24 @@ class Task
         return $this;
     }
 
-    public function getState(): ?states
+    public function getState(): ?States
     {
         return $this->state;
     }
 
-    public function setState(?states $state): static
+    public function setState(?States $state): static
     {
         $this->state = $state;
 
         return $this;
     }
 
-    public function getProject(): ?project
+    public function getProject(): ?Project
     {
         return $this->project;
     }
 
-    public function setProject(?project $project): static
+    public function setProject(?Project $project): static
     {
         $this->project = $project;
 

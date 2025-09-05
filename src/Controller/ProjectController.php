@@ -2,11 +2,13 @@
 
 namespace App\Controller;
 
+use App\Entity\States;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Entity\Project;
+use App\Entity\Task;
 use App\Form\ProjectType;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
@@ -48,15 +50,13 @@ final class ProjectController extends AbstractController
     #[Route('/project/show/{id}', name: 'project_show')]
     public function showProject(ManagerRegistry $doctrine, int $id): Response
     {
-        // Récupérer le repository pour l'entité Project
-         $projectRepository = $doctrine->getRepository(Project::class);
+        $em = $doctrine->getManager();
+        $project = $em->getRepository(Project::class)->find($id);
+        $states = $em->getRepository(States::class)->findAll();
 
-        // Récupérer tous les projets
-        $project = $projectRepository->find($id);
-
-        // Passer les projets au template
         return $this->render('project/show.html.twig', [
             'project' => $project,
+            'states' => $states,
         ]);
     }
     #[Route('/project/edit/{id}', name: 'project_edit')]
@@ -88,7 +88,7 @@ final class ProjectController extends AbstractController
         $projectRepository = $doctrine->getRepository(Project::class);
         $project = $projectRepository->find($id);
         $doctrine->getManager()->remove($project);
-        
+
         $doctrine->getManager()->flush();
 
         // Passer les projets au template

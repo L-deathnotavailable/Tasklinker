@@ -1,0 +1,60 @@
+{% extends 'base.html.twig' %}
+
+{% block page_title %}
+    {% block header %}
+        <div class="flex-header">
+            <h1>{{ project.name|default('Projet') }}</h1>
+
+            {# Liste des employés assignés à au moins une tâche #}
+            <div class="user-list">
+                {% set seen = [] %}
+                {% for task in project.tasks %}
+                    {% if task.employe and task.employe.id not in seen %}
+                        <div class="avatar">
+                            {{ task.employe.firstname|first }}{{ task.employe.name|first }}
+                        </div>
+                        {% set seen = seen|merge([task.employe.id]) %}
+                    {% endif %}
+                {% endfor %}
+            </div>
+            <a class="button" href="{{ path('project_edit', {id: project.id}) }}">Modifier</a>
+        </div>
+    {% endblock %}
+{% endblock %}
+
+{% block body %}
+    <div id="tasks-container">
+        {% for state in states %}
+            <div class="task-column">
+                <h2>{{ state.name }}</h2>
+                <div class="tasks-list">
+                    {% for task in project.tasks | filter(task => task.state == state) %}
+                        <a class="task" href="{{ path('task_show', {id: task.id}) }}">
+                            <h3>{{ task.title }}</h3>
+                            {% if task.description %}
+                                <p>{{ task.description }}</p>
+                            {% endif %}
+                            {% if task.deadline or task.employe %}
+                                <div class="task-infos">
+                                    {% if task.deadline %}
+                                        <div class="task-deadline">
+                                            <i class="fa-regular fa-calendar"></i> {{ task.deadline | date('d/m/Y') }}
+                                        </div>
+                                    {% endif %}
+                                    {% if task.employe %}
+                                        <div class="mini-user">
+                                            {{ task.employe.firstname | first }} {{ task.employe.name | first }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            {% endif %}
+                        </a>
+                    {% endfor %}
+                    <a href="{{ path('task_add', {id: project.id}) }}" class="task-add">
+                        + Ajouter une tâche
+                    </a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
