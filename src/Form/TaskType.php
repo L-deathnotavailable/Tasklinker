@@ -22,7 +22,7 @@ class TaskType extends AbstractType
             ->add('deadline', DateType::class, [
                 'label' => 'Date',
                 'widget' => 'single_text',
-                'required' => false,
+                'required' => true,
             ])
             ->add('state', EntityType::class, [
                 'class' => States::class,
